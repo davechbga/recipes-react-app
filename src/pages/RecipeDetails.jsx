@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
 
-function Recipe() {
+const RecipeDetails = () => {
   let params = useParams();
   const [details, setDetails] = useState({});
   const [activeTab, setActiveTab] = useState("instructions");
 
-  const fetchDetails = async () => {
-    const data = await fetch(
-      `https://api.spoonacular.com/recipes/${params.name}/information?apiKey=${process.env.REACT_APP_API_KEY}`
-    );
-    const detailData = await data.json();
-    setDetails(detailData);
-  };
-
   useEffect(() => {
+    const fetchDetails = async () => {
+      const data = await fetch(
+        `https://api.spoonacular.com/recipes/${params.name}/information?apiKey=${process.env.REACT_APP_API_KEY}`
+      );
+      const detailsData = await data.json();
+      setDetails(detailsData);
+      console.log(detailsData);
+    };
     fetchDetails();
   }, [params.name]);
 
   return (
     <DetailWrapper>
-      <div>
+      <div style={{ flex: 1 }}>
         <h2>{details.title}</h2>
-        <img src={details.image} alt="" />
+        <img src={details.image} alt={details.title} />
       </div>
       <Info>
         <Button
@@ -39,27 +39,27 @@ function Recipe() {
           Ingredients
         </Button>
         {activeTab === "instructions" && (
-          <div>
-            <h3 dangerouslySetInnerHTML={{ __html: details.summary }}></h3>
-            <h3 dangerouslySetInnerHTML={{ __html: details.instructions }}></h3>
+          <div style={{ marginTop: 30 }}>
+            <ol dangerouslySetInnerHTML={{ __html: details.instructions }}></ol>
           </div>
         )}
         {activeTab === "ingredients" && (
-          <ul>
+          <ol style={{ marginTop: 30 }}>
             {details.extendedIngredients.map((ingredient) => (
               <li key={ingredient.id}>{ingredient.original}</li>
             ))}
-          </ul>
+          </ol>
         )}
       </Info>
     </DetailWrapper>
   );
-}
+};
 
 const DetailWrapper = styled.div`
   margin-top: 10rem;
   margin-bottom: 5rem;
   display: flex;
+  gap: 5rem;
   .active {
     background: linear-gradient(35deg, #494949, #313131);
     color: white;
@@ -86,7 +86,7 @@ const Button = styled.button`
 `;
 
 const Info = styled.div`
-  margin-left: 10rem;
+  flex: 1;
 `;
 
-export default Recipe;
+export default RecipeDetails;

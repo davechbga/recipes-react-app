@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Link, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-function Cuisine() {
-  const [cuisine, setCuisine] = useState([]);
+const Cuisines = () => {
+  const [cuisines, setCuisines] = useState([]);
   let params = useParams();
 
   const getCuisine = async (name) => {
-    const data = await fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&cuisine=${name}`
+    const api = await fetch(
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.REACT_APP_API_KEY}&number=9&cuisine=${name}`
     );
-    const recipes = await data.json();
-    setCuisine(recipes.results);
+    const data = await api.json();
+    setCuisines(data.results);
   };
 
   useEffect(() => {
@@ -26,33 +26,29 @@ function Cuisine() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {cuisine.map((item) => {
+      {cuisines.map((recipe) => {
         return (
-          <Card key={item.id}>
-            <Link to={"/recipe/" + item.id}>
-              <img src={item.image} alt="" />
-              <h4>{item.title}</h4>
+          <Card key={recipe.id}>
+            <Link to={`/recipeDetails/${recipe.id}`}>
+              <img src={recipe.image} alt={recipe.title} />
+              <h4>{recipe.title}</h4>
             </Link>
           </Card>
         );
       })}
     </Grid>
   );
-}
+};
 
 const Grid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   grid-gap: 3rem;
 `;
-
 const Card = styled.div`
   img {
     width: 100%;
     border-radius: 2rem;
-  }
-  a {
-    text-decoration: none;
   }
   h4 {
     text-align: center;
@@ -60,4 +56,4 @@ const Card = styled.div`
   }
 `;
 
-export default Cuisine;
+export default Cuisines;

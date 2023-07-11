@@ -1,10 +1,11 @@
-import Veggie from "../components/Veggie";
+import React from "react";
+import GlutenFree from "../components/GlutenFree";
+import Lowcarb from "../components/Lowcarb";
 import Popular from "../components/Popular";
+import Veggie from "../components/Veggie";
 import { motion } from "framer-motion";
 
-import React from "react";
-
-function Home() {
+const Home = () => {
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -12,10 +13,12 @@ function Home() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Veggie />
       <Popular />
+      <Veggie />
+      <Lowcarb />
+      <GlutenFree />
     </motion.div>
   );
-}
+};
 
 export default Home;

@@ -4,32 +4,32 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
 import { Link } from "react-router-dom";
 
-const Popular = () => {
-  const [popular, setPopular] = useState([]);
+const Lowcarb = () => {
+  const [lowCarb, setLowCarb] = useState([]);
 
   useEffect(() => {
-    getPopular();
+    getLowCarb();
   }, []);
 
-  const getPopular = async () => {
-    const check = localStorage.getItem("popular");
+  const getLowCarb = async () => {
+    const check = localStorage.getItem("lowcarb");
 
     if (check) {
-      setPopular(JSON.parse(check));
+      setLowCarb(JSON.parse(check));
     } else {
       const api = await fetch(
-        `https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_API_KEY}&number=9`
+        `https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_API_KEY}&number=9&tags=ketogenic`
       );
       const data = await api.json();
       console.log(data);
-      setPopular(data.recipes);
-      localStorage.setItem("popular", JSON.stringify(data.recipes));
+      setLowCarb(data.recipes);
+      localStorage.setItem("lowcarb", JSON.stringify(data.recipes));
     }
   };
 
   return (
     <Wrapper>
-      <h3>Popular Picks</h3>
+      <h3>Low Carb Picks</h3>
       <Splide
         options={{
           perPage: 4,
@@ -39,7 +39,7 @@ const Popular = () => {
           pagination: false,
         }}
       >
-        {popular.map((recipe) => {
+        {lowCarb.map((recipe) => {
           return (
             <SplideSlide key={recipe.id}>
               <Card>
@@ -97,4 +97,4 @@ const Gradient = styled.div`
   background: linear-Gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
 `;
 
-export default Popular;
+export default Lowcarb;

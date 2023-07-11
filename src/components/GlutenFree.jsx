@@ -4,32 +4,32 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
 import { Link } from "react-router-dom";
 
-const Popular = () => {
-  const [popular, setPopular] = useState([]);
+const GlutenFree = () => {
+  const [glutenFree, setGlutenFree] = useState([]);
 
   useEffect(() => {
-    getPopular();
+    getGlutenFree();
   }, []);
 
-  const getPopular = async () => {
-    const check = localStorage.getItem("popular");
+  const getGlutenFree = async () => {
+    const check = localStorage.getItem("glutenfree");
 
     if (check) {
-      setPopular(JSON.parse(check));
+      setGlutenFree(JSON.parse(check));
     } else {
       const api = await fetch(
-        `https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_API_KEY}&number=9`
+        `https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_API_KEY}&number=9&tags=gluten free`
       );
       const data = await api.json();
       console.log(data);
-      setPopular(data.recipes);
-      localStorage.setItem("popular", JSON.stringify(data.recipes));
+      setGlutenFree(data.recipes);
+      localStorage.setItem("glutenfree", JSON.stringify(data.recipes));
     }
   };
 
   return (
     <Wrapper>
-      <h3>Popular Picks</h3>
+      <h3>Gluten Free Picks</h3>
       <Splide
         options={{
           perPage: 4,
@@ -39,7 +39,7 @@ const Popular = () => {
           pagination: false,
         }}
       >
-        {popular.map((recipe) => {
+        {glutenFree.map((recipe) => {
           return (
             <SplideSlide key={recipe.id}>
               <Card>
@@ -97,4 +97,4 @@ const Gradient = styled.div`
   background: linear-Gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
 `;
 
-export default Popular;
+export default GlutenFree;
